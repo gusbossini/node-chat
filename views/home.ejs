@@ -1,0 +1,31 @@
+<style>
+	* { margin: 0; padding: 0; box-sizing: border-box; }
+	body { font: 1em sans-serif; }
+	form { background: #f5f1ee; padding: 6px; position: fixed; bottom: 0; width: 100%; box-shadow: 0 0 8px -2px; }
+	form input { border: 2px solid black; padding: 10px; width: 85%; margin-right: .5%; }
+	form button { width: 14%; background: #43a047; border: none; padding: 10px; color: white;}
+	#messages { list-style-type: none; margin: 0; padding: 0; }
+	#messages li { padding: 5px 10px; }
+	#messages li:nth-child(odd) { background: #eee; }
+</style>
+
+<ul id="messages"></ul>
+<form action="">
+	<input id="m" autocomplete="off" /><button>Enviar</button>
+</form>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+    const socket = io()
+
+    document.querySelector('form').addEventListener('submit', (event) => {
+        event.preventDefault()
+        const msg = document.querySelector('#m').value
+        socket.emit('chat_message', msg)
+    })
+
+    socket.on('chat_message', (msg) => {
+        document.querySelector('#messages').insertAdjacentHTML('beforeend', `<li>${msg}</li>`)
+    })
+</script>
